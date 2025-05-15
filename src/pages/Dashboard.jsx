@@ -9,26 +9,21 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://reqres.in/api/users?page=1')
-      .then(res => res.json())
-      .then(data => {
-        setAvatars(data.data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setAvatars([
-          { id: 1, first_name: 'Sarah', last_name: 'Wilson', avatar: 'https://via.placeholder.com/150' },
-          { id: 2, first_name: 'James', last_name: 'Cooper', avatar: 'https://via.placeholder.com/150' },
-          { id: 3, first_name: 'Emma', last_name: 'Taylor', avatar: 'https://via.placeholder.com/150' },
-        ]);
-        setLoading(false);
-      });
+    // Static fallback avatars (no fetch)
+    setAvatars([
+      { id: 1, first_name: 'Sarah', last_name: 'Wilson', avatar: '/image1.png' },
+      { id: 2, first_name: 'Vanyaa', last_name: 'Dhishi', avatar: '/image3.png' },
+      { id: 3, first_name: 'Emma', last_name: 'Taylor', avatar: '/image4.png' },
+    ]);
+    setLoading(false);
   }, []);
 
   const handleAvatarUpdate = (updatedAvatar) => {
     const updatedAvatarWithImage = {
       ...updatedAvatar,
-      avatar: updatedAvatar.newImage || updatedAvatar.avatar
+      avatar: updatedAvatar.newImage instanceof File
+        ? URL.createObjectURL(updatedAvatar.newImage)
+        : updatedAvatar.newImage || updatedAvatar.avatar
     };
 
     setAvatars(prevAvatars =>
